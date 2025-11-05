@@ -3,6 +3,12 @@ name = "feedbin-deduplication"
 version = "0.1.0"
 description = "Deduplicate unread entries from your Feedbin account"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 classifiers = ["Private :: Do Not Upload"]
-dependencies = ["httpx"]
+dependencies = ["httpx", "typing-extensions;python_version < '3.15'"]
+
+[dependency-groups]
+cloudflare = ["workers-py"]
+
+[tool.ruff]
+exclude = ["pyt"]

@@ -1,6 +1,15 @@
-from typing import Literal, TypedDict
+import sys
+from typing import Literal
+
+if sys.version_info < (3, 15):
+    from typing_extensions import TypedDict
+else:
+    from typing import TypedDict
 
 SERVER = "https://api.feedbin.com"
+
+type EntryID = int
+type FeedID = int
 
 # Authentication: https://github.com/feedbin/feedbin-api/blob/master/content/authentication.md
 AUTHENTICATION_URL = f"{SERVER}/v2/authentication.json"
@@ -10,10 +19,10 @@ AUTHENTICATION_URL = f"{SERVER}/v2/authentication.json"
 ENTRIES_URL = f"{SERVER}/v2/entries.json"
 
 
-class EntriesParams(TypedDict, total=False):
+class EntriesParams(TypedDict, total=False, closed=True):
     page: int
     since: str
-    ids: list[int]
+    ids: list[EntryID]
     read: bool
     starred: bool
     per_page: int
@@ -23,9 +32,9 @@ class EntriesParams(TypedDict, total=False):
     include_content_diff: bool
 
 
-class EntriesResponse(TypedDict):
-    id: int
-    feed_id: int
+class EntriesResponse(TypedDict, closed=True):
+    id: EntryID
+    feed_id: FeedID
     title: str | None
     url: str
     extracted_content_url: str
@@ -43,5 +52,5 @@ class EntriesResponse(TypedDict):
 UNREAD_ENTRIES_DELETE_URL = f"{SERVER}/v2/unread_entries/delete.json"
 
 
-class UnreadEntriesBody(TypedDict):
-    unread_entries: list[int]
+class UnreadEntriesBody(TypedDict, closed=True):
+    unread_entries: list[EntryID]

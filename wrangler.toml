@@ -1,0 +1,10 @@
+name = "feedbin-deduplication"
+main = "cloudflare.py"
+compatibility_flags = ["python_workers"]
+compatibility_date = "2025-08-14"
+workers_dev = false
+preview_urls = false
+
+[triggers]
+# Feedbin only updates every 15 minutes.
+crons = ["*/15 * * * *"]

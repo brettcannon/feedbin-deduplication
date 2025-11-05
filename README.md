@@ -2,11 +2,26 @@
 Deduplicate unread entries from your [Feedbin](https://feedbin.com) account using the [Feedbin API](https://github.com/feedbin/feedbin-api).
 
 # Usage
+## CLI
 To run, set the `FEEDBIN_USERNAME` and `FEEDBIN_PASSWORD` environment variables and call the [just](https://just.systems) recipe (notice their is a leading space and it is **IMPORTANT**; it causes your shell to **not** save the command, and thus your Feedbin password, to your history):
 
 ```shell
- FEEDBIN_USERNAME="" FEEDBIN_PASSWORD="" just run
+ FEEDBIN_USERNAME="<username>" FEEDBIN_PASSWORD="<password>" just run
 ```
+
+## Cloudflare Workers
+The repo contains support for deploying to [Cloudflare Workers](https://developers.cloudflare.com/workers/).
+
+The steps for initial deployment are:
+
+1. `just cloudflare-set-secrets` to set your Feedbin username and password (and create the Cloudflare worker if didn't already exist)
+1. `just cloudflare-deploy`
 
 # Development
 See the [justfile](https://just.systems) for relevant recipes which require [uv](https://docs.astral.sh/uv/) to be installed.
+
+## Cloudflare
+
+1. Store your credential secrets in a `.env` file
+2. Start a pywrangler dev server via `just cloudflare-dev`
+3. Hit the cron trigger endpoint via `just cloudflare-cron-trigger`

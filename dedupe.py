@@ -3,8 +3,8 @@ import collections
 import feedbin
 
 
-def duplicates(unread_entries: list[feedbin.EntriesResponse]) -> set[int]:
-    duplicates: set[int] = set()
+def duplicates(unread_entries: list[feedbin.EntriesResponse]) -> set[feedbin.EntryID]:
+    duplicates: set[feedbin.EntryID] = set()
 
     print("Total unread entries:", len(unread_entries))
     # Short-circuit if there are no unread entries.
@@ -12,7 +12,7 @@ def duplicates(unread_entries: list[feedbin.EntriesResponse]) -> set[int]:
         return duplicates
 
     # Figure out which feeds have the fewest unread entries.
-    feed_entry_count: dict[int, int] = collections.defaultdict(int)
+    feed_entry_count: dict[feedbin.FeedID, int] = collections.defaultdict(int)
     for entry in unread_entries:
         feed_entry_count[entry["feed_id"]] += 1
     print("Feeds w/ unread entries:", len(feed_entry_count))

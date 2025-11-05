@@ -19,19 +19,18 @@ async def unread_entries(client: httpx.AsyncClient) -> list[feedbin.EntriesRespo
     return response.raise_for_status().json()
 
 
-async def mark_entries_as_read(client: httpx.AsyncClient, entry_ids: list[int]) -> None:
+async def mark_entries_as_read(
+    client: httpx.AsyncClient, entry_ids: list[feedbin.FeedID]
+) -> None:
     body: feedbin.UnreadEntriesBody = {"unread_entries": entry_ids}
     response = await client.post(feedbin.UNREAD_ENTRIES_DELETE_URL, json=body)
     response.raise_for_status()
 
 
-async def main():
-    username = os.getenv("FEEDBIN_USERNAME")
-    password = os.getenv("FEEDBIN_PASSWORD")
-    if username is None or password is None:
-        raise RuntimeError("FEEDBIN_USERNAME and FEEDBIN_PASSWORD must be set")
-
-    async with httpx.AsyncClient(auth=(username, password)) as client:
+async def main(username: str, password: str) -> None:
+    async with httpx.AsyncClient(
+        auth=(username, password), headers={"accept-encoding": "identity"}
+    ) as client:
         # Make sure authentication works.
         if __debug__:
             await check_auth(client)
@@ -46,4 +45,9 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    username = os.getenv("FEEDBIN_USERNAME")
+    password = os.getenv("FEEDBIN_PASSWORD")
+    if not username or not password:
+        raise RuntimeError("FEEDBIN_USERNAME and FEEDBIN_PASSWORD must be set")
+
+    asyncio.run(main(username, password))
