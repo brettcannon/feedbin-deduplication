@@ -28,9 +28,7 @@ async def mark_entries_as_read(
 
 
 async def main(username: str, password: str) -> None:
-    async with httpx.AsyncClient(
-        auth=(username, password), headers={"accept-encoding": "identity"}
-    ) as client:
+    async with httpx.AsyncClient(auth=(username, password)) as client:
         # Make sure authentication works.
         if __debug__:
             await check_auth(client)
